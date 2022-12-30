@@ -1,6 +1,7 @@
 package http
 
 import (
+	"context"
 	"fmt"
 	"github.com/cloudwego/hertz/pkg/app/server"
 	"github.com/cloudwego/hertz/pkg/app/server/registry"
@@ -67,12 +68,12 @@ func Init(s *service.Service, config *conf.AppConfig) {
 	r := nacos.NewNacosRegistry(cli)
 
 	// 链路追踪
-	provider.NewOpenTelemetryProvider(
+	p := provider.NewOpenTelemetryProvider(
 		provider.WithServiceName(config.Server.Name),
 		provider.WithExportEndpoint(addr),
 		provider.WithInsecure(),
 	)
-	//defer p.Shutdown(context.Background())
+	defer p.Shutdown(context.Background())
 	tracer, cfg := hertztracing.NewServerTracer()
 	h = server.Default(
 		server.WithHostPorts(addr),
