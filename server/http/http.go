@@ -4,16 +4,20 @@ import (
 	"fmt"
 	"github.com/cloudwego/hertz/pkg/app/server"
 	"github.com/cloudwego/hertz/pkg/app/server/registry"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/hertz/pkg/common/utils"
+	"github.com/hertz-contrib/cors"
+	hertzlogrus "github.com/hertz-contrib/obs-opentelemetry/logging/logrus"
+	"github.com/hertz-contrib/obs-opentelemetry/provider"
 	hertztracing "github.com/hertz-contrib/obs-opentelemetry/tracing"
-	hertzSentinel "github.com/hertz-contrib/opensergo/sentinel/adapter"
 	"github.com/hertz-contrib/registry/nacos"
 	"github.com/nacos-group/nacos-sdk-go/clients"
 	"github.com/nacos-group/nacos-sdk-go/common/constant"
 	"github.com/nacos-group/nacos-sdk-go/vo"
-	"hertz_demo/conf"
-	"hertz_demo/service"
-	"log"
+	"go.backend/conf"
+	"go.backend/middleware"
+	"go.backend/service"
+	"os"
 )
 
 var (
@@ -22,6 +26,16 @@ var (
 )
 
 func Init(s *service.Service, config *conf.AppConfig) {
+
+	// init log
+	hlog.SetLogger(hertzlogrus.NewLogger())
+	f, err := os.OpenFile("./output.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		panic(err)
+	}
+	hlog.SetOutput(f)
+	hlog.SetLevel(hlog.LevelTrace)
+
 	svc = s
 	addr := fmt.Sprintf("127.0.0.1:%d", config.Server.Port)
 	sc := []constant.ServerConfig{
@@ -46,11 +60,19 @@ func Init(s *service.Service, config *conf.AppConfig) {
 		},
 	)
 	if err != nil {
-		log.Fatal(err)
+		hlog.Fatal(err)
 		return
 	}
 	// 服务注册
 	r := nacos.NewNacosRegistry(cli)
+
+	// 链路追踪
+	provider.NewOpenTelemetryProvider(
+		provider.WithServiceName(config.Server.Name),
+		provider.WithExportEndpoint(addr),
+		provider.WithInsecure(),
+	)
+	//defer p.Shutdown(context.Background())
 	tracer, cfg := hertztracing.NewServerTracer()
 	h = server.Default(
 		server.WithHostPorts(addr),
@@ -62,9 +84,9 @@ func Init(s *service.Service, config *conf.AppConfig) {
 		}),
 		tracer,
 	)
-	// Tracing & Sentinel
-	// todo cors
-	h.Use(hertztracing.ServerMiddleware(cfg), hertzSentinel.SentinelServerMiddleware())
+
+	// Tracing & cors
+	h.Use(hertztracing.ServerMiddleware(cfg), cors.Default(), middleware.AccessLog())
 
 	// register handler with http route
 	InitRouter(h)
@@ -73,6 +95,7 @@ func Init(s *service.Service, config *conf.AppConfig) {
 	go func() {
 		h.Spin()
 	}()
+
 }
 func Shutdown() {
 

@@ -1,8 +1,8 @@
 package dao
 
 import (
-	"hertz_demo/conf"
-	"hertz_demo/initialization"
+	"go.backend/conf"
+	"go.backend/initialization"
 )
 
 var dao *Dao

@@ -2,10 +2,10 @@ package initialization
 
 import (
 	"fmt"
+	"go.backend/conf"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	gormopentracing "gorm.io/plugin/opentracing"
-	"hertz_demo/conf"
 	"log"
 )
 

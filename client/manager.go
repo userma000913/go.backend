@@ -1,8 +1,8 @@
 package client
 
 import (
-	"hertz_demo/client/demo1"
-	"hertz_demo/conf"
+	"go.backend/client/demo1"
+	"go.backend/conf"
 )
 
 // 服务发现

@@ -1,6 +1,6 @@
 package code
 
-import "hertz_demo/model"
+import "go.backend/model"
 
 var e = make(map[int]string)
 

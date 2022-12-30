@@ -2,7 +2,7 @@ package initialization
 
 import (
 	"github.com/olivere/elastic/v7"
-	"hertz_demo/conf"
+	"go.backend/conf"
 	"log"
 )
 

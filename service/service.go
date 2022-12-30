@@ -1,9 +1,9 @@
 package service
 
 import (
-	"hertz_demo/client"
-	"hertz_demo/conf"
-	"hertz_demo/dao"
+	"go.backend/client"
+	"go.backend/conf"
+	"go.backend/dao"
 )
 
 type Service struct {

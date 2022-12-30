@@ -5,7 +5,7 @@ import (
 )
 
 func InitRouter(h *server.Hertz) {
-	v1 := h.Group("/v1")
+	v1 := h.Group("/api")
 	v1.GET("/test", Test)
 	v1.GET("/test/mgr", TestMgr)
 	v1.Any("/ping", ping)

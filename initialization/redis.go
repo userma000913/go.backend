@@ -3,7 +3,7 @@ package initialization
 import (
 	"fmt"
 	"github.com/go-redis/redis"
-	"hertz_demo/conf"
+	"go.backend/conf"
 )
 
 type Redis struct {

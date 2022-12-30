@@ -1,10 +1,10 @@
 package backend
 
 import (
-	"hertz_demo/client"
-	"hertz_demo/conf"
-	"hertz_demo/dao"
-	"hertz_demo/service"
+	"go.backend/client"
+	"go.backend/conf"
+	"go.backend/dao"
+	"go.backend/service"
 )
 
 type Backend struct {

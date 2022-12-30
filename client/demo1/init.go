@@ -1,8 +1,8 @@
 package demo1
 
 import (
-	"hertz_demo/conf"
-	"hertz_demo/initialization"
+	"go.backend/conf"
+	"go.backend/initialization"
 )
 
 type Manager struct {

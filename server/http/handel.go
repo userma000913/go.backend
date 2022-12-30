@@ -3,11 +3,13 @@ package http
 import (
 	"context"
 	"github.com/cloudwego/hertz/pkg/app"
+	"github.com/cloudwego/hertz/pkg/common/hlog"
 	"github.com/cloudwego/hertz/pkg/common/utils"
 	"github.com/cloudwego/hertz/pkg/protocol/consts"
 )
 
 func ping(ctx context.Context, c *app.RequestContext) {
+	hlog.CtxInfof(ctx, "ok")
 	c.JSON(consts.StatusOK, utils.H{
 		"ping": "pong",
 	})
