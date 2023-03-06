@@ -26,7 +26,25 @@ var (
 	h   *server.Hertz
 )
 
+func initLog() {
+
+}
+
 func Init(s *service.Service, config *conf.AppConfig) {
+
+	// 每小时一个文件
+	//logf, _ := rotatelogs.New(l.Opts.LogFileDir+sp+l.Opts.AppName+"-"+fN+".%Y_%m%d_%H",
+	//	rotatelogs.WithLinkName(l.Opts.LogFileDir+sp+l.Opts.AppName+"-"+fN),
+	//	rotatelogs.WithMaxAge(30*24*time.Hour),
+	//	rotatelogs.WithRotationTime(time.Minute),
+	//)
+	//
+	//logger := hertzzap.NewLogger(
+	//	hertzzap.WithZapOptions(),
+	//	hertzzap.WithCoreWs(zapcore.AddSync(logf)),
+	//)
+	//
+	//hlog.SetLogger(logger)
 
 	// init log
 	hlog.SetLogger(hertzlogrus.NewLogger())
